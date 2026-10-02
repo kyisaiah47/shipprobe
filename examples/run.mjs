@@ -74,8 +74,9 @@ export async function runExample({ log = console.log, outDir = null } = {}) {
   } finally {
     server.close();
   }
-  log('\nexample                                                              want  got');
-  for (const r of results) log(`  ${r.what.padEnd(66)} ${String(r.want).padStart(4)} ${String(r.got).padStart(4)}${r.got === r.want ? '' : '  <- differs'}`);
+  /* The codes come first so the table stays aligned in a narrow terminal. */
+  log('\nwant  got  example');
+  for (const r of results) log(`${String(r.want).padStart(4)} ${String(r.got).padStart(4)}  ${r.what}${r.got === r.want ? '' : '  <- differs'}`);
   if (results.some((r) => r.got === 2)) {
     log('\nA step could not check (exit 2). For page and promote, install Playwright: npm i -D playwright && npx playwright install chromium');
     return 2;
