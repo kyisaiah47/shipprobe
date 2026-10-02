@@ -19,6 +19,8 @@ npx shipprobe demo
 
 The demo runs every command against a fixture app. The demo prints the exit code for each command. The examples are in [examples/](examples/README.md).
 
+The video tutorial starts from a fresh clone and builds the worked example: [Build BreachProbe with ShipProbe](https://www.youtube.com/watch?v=fRRK9V_ZcuI). It copies the example for a different product. It adds the GitHub Action to your own repository. It runs the app scaffold.
+
 ## Commands
 
 | Command | What it checks |
