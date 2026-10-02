@@ -33,7 +33,7 @@
   "scripts": {
     "test": "node test/run.mjs",
     "scrub": "node scripts/scrub-gate.mjs",
-    "example": "node examples/run.mjs",
+    "example": "playwright install chromium && node examples/run.mjs",
     "demo": "node bin/shipprobe.mjs demo"
   },
   "keywords": [
@@ -68,6 +68,9 @@
     "node": ">=20"
   },
   "dependencies": {},
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  },
   "peerDependencies": {
     "playwright": ">=1.40.0"
   },

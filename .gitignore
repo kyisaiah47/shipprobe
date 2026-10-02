@@ -4,3 +4,4 @@ node_modules/
 shipprobe-fixes.md
 shipprobe-report.json
 /tmp/
+examples/out/

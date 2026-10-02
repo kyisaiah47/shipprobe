@@ -6,6 +6,8 @@ demo-app is the app that BreachProbe scans in its worked example. It is rebuilt 
 node examples/run.mjs      # or: npx shipprobe demo
 ```
 
+After you clone the repository, `npm install` and then `npm run example` install Playwright's Chromium and run the same file. When you run `run.mjs` as a script, it writes each command's output to `examples/out/`, the sign-up page's 1280px picture to `examples/out/shots/`, and the exit codes to `examples/out/summary.json`. `npx shipprobe demo` writes nothing.
+
 Nothing leaves your machine. `serve.mjs` serves the site and a stand-in for its database on loopback. It signs a fresh public key for the bundle each time it starts, so no key is stored in this repository.
 
 | Step | Command | Exit |
