@@ -1,6 +1,6 @@
 {
   "name": "shipprobe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "One tool for shipping safely. Security, dependency, agent-instruction, rendered-page and plan checks, each measured with selectors and numbers. It fails closed and runs offline.",
   "type": "module",
   "bin": {

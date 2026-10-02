@@ -7,7 +7,14 @@
  *
  * Exit 0 clean, 1 a finding, 2 could not check (no browser, a page that did not render, a rule
  * that could not measure). 2 wins over 1 and the findings still print.
+ *
+ * --shots <dir> saves one full-page PNG per viewport the command renders, named <width>.png, as
+ * the deferless 0.1 render gate did. A picture is taken at desktop widths only: 1280px and wider.
+ * The narrower ladder widths are layout measurements and are never captured. A picture that could
+ * not be saved is exit 2, because the run did not produce what it was asked for.
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { newResult, PASS, FAIL, UNCHECKED } from '../result.mjs';
 import { resolveChromium, targetToUrl, openPage, inPage, sitemapRoutes } from './browser.mjs';
 import { pageRenderFailure } from './rendered.mjs';
@@ -15,6 +22,9 @@ import { selectRules, RULES } from './rules/index.mjs';
 import { VIEWPORTS } from './rules/ladder.mjs';
 
 export { RULES };
+
+/** The narrowest width --shots takes a picture at. */
+export const SHOT_MIN_WIDTH = 1280;
 
 const list = (v) => (v === null || v === undefined || v === true ? null : String(v).split(',').map((s) => s.trim()).filter(Boolean));
 
@@ -38,6 +48,37 @@ export async function runPage(targets, opts = {}) {
   }
   const settleMs = Number.isFinite(Number(opts.settle)) && opts.settle !== undefined ? Number(opts.settle) : 1500;
   const stopSettle = Math.min(750, Math.max(60, settleMs));
+
+  /* The widths this command renders are the --vw widths, plus the ladder when a ladder rule runs.
+   * The plan is settled before the browser starts, so a run that could take no picture at all
+   * stops here instead of measuring every page and then saving nothing. */
+  let shots = null;
+  if (opts.shots !== undefined && opts.shots !== null && opts.shots !== false) {
+    if (opts.shots === true || !String(opts.shots).trim()) {
+      result.unchecked.push({ why: '--shots needs a directory' });
+      return result;
+    }
+    const dir = path.resolve(String(opts.shots));
+    const rendered = [...new Set([...widths, ...(rules.some((r) => r.scope === 'ladder') ? VIEWPORTS.map((v) => v.w) : [])])].sort((a, b) => a - b);
+    const desktop = rendered.filter((w) => w >= SHOT_MIN_WIDTH);
+    const narrow = rendered.filter((w) => w < SHOT_MIN_WIDTH);
+    if (!desktop.length) {
+      result.unchecked.push({
+        why: `--shots takes pictures at ${SHOT_MIN_WIDTH}px and wider, and this run renders only ${narrow.join(', ')}px, so no picture would be saved. Add a width of ${SHOT_MIN_WIDTH} or more to --vw.`,
+      });
+      return result;
+    }
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+    } catch (e) {
+      result.unchecked.push({ why: `--shots could not create ${dir}: ${e.message}` });
+      return result;
+    }
+    shots = { dir, widths: desktop, saved: new Map() };
+    if (narrow.length) {
+      result.notes.push(`--shots: no picture at ${narrow.join(', ')}px. Pictures are taken at ${SHOT_MIN_WIDTH}px and wider. The narrower widths are measured, not captured.`);
+    }
+  }
 
   let chromium;
   try {
@@ -80,6 +121,19 @@ export async function runPage(targets, opts = {}) {
   };
   const fail = (where, why, rule) => result.unchecked.push({ where: rule ? `${where} [${rule}]` : where, why: String(why).split('\n')[0] });
 
+  /* One picture per width per target. It is taken before any rule runs, so it shows the page as
+   * it rendered, not as a rule left it after scrolling or wheeling it. */
+  const shoot = async (page, width, where, taken) => {
+    taken.add(width);
+    const file = path.join(shots.dir, `${width}.png`);
+    try {
+      await page.screenshot({ path: file, fullPage: true });
+      shots.saved.set(file, width);
+    } catch (e) {
+      fail(where, `--shots could not save ${file}: ${e.message}`);
+    }
+  };
+
   try {
     for (const target of all) {
       let resolved;
@@ -89,6 +143,8 @@ export async function runPage(targets, opts = {}) {
         fail(target, e.message);
         continue;
       }
+      const taken = new Set();
+      let broken = false;
       try {
         /* width-scoped rules, at each --vw width */
         const widthRules = rules.filter((r) => r.scope === 'width');
@@ -101,14 +157,17 @@ export async function runPage(targets, opts = {}) {
             ({ page, resp } = await openPage(browser, resolved.url, { width, height: 800, settleMs }));
           } catch (e) {
             fail(where, `the page could not be opened: ${e.message}`);
+            broken = true;
             continue;
           }
           try {
             const broke = await pageRenderFailure(page, resp, inPage);
             if (broke) {
               fail(where, broke.msg);
+              broken = true;
               continue;
             }
+            if (shots && shots.widths.includes(width) && !taken.has(width)) await shoot(page, width, where, taken);
             const ctx = { browser, chromium, page, inPage, openPage, url: resolved.url, origin: resolved.origin, width, height: 800, settleMs, stopSettle, options: opts, cache, shared: {}, first: i === 0 };
             for (const rule of widthRules) {
               try {
@@ -139,6 +198,7 @@ export async function runPage(targets, opts = {}) {
               await page.setViewportSize({ width: vp.w, height: vp.h });
               await page.evaluate(() => document.fonts?.ready).catch(() => {});
               await page.waitForTimeout(350);
+              if (shots && shots.widths.includes(vp.w) && !taken.has(vp.w)) await shoot(page, vp.w, `${resolved.url} @${vp.w}px`, taken);
               for (const rule of ladderRules) {
                 try {
                   for (const f of await rule.probe(ctx, vp)) add(rule, resolved.url, [f], f.warning ? 'warnings' : 'findings');
@@ -149,6 +209,7 @@ export async function runPage(targets, opts = {}) {
             }
           } catch (e) {
             fail(resolved.url, e.message);
+            broken = true;
           } finally {
             if (page) await page.close().catch(() => {});
           }
@@ -161,6 +222,28 @@ export async function runPage(targets, opts = {}) {
             add(rule, resolved.url, out.findings);
           } catch (e) {
             fail(resolved.url, e.cannotCheck ? e.message : `the rule threw: ${e.message}`, rule.id);
+          }
+        }
+
+        /* A --vw width no rule rendered, as with --only nested, still gets its picture. A page
+         * that already failed to render is not opened again: it is exit 2 either way. */
+        for (const width of shots && !broken ? shots.widths.filter((w) => !taken.has(w)) : []) {
+          const where = `${resolved.url} @${width}px`;
+          let page;
+          try {
+            let resp;
+            ({ page, resp } = await openPage(browser, resolved.url, { width, height: 800, settleMs }));
+            const broke = await pageRenderFailure(page, resp, inPage);
+            if (broke) {
+              fail(where, broke.msg);
+              break;
+            }
+            await shoot(page, width, where, taken);
+          } catch (e) {
+            fail(where, `the page could not be opened: ${e.message}`);
+            break;
+          } finally {
+            if (page) await page.close().catch(() => {});
           }
         }
       } finally {
@@ -186,6 +269,13 @@ export async function runPage(targets, opts = {}) {
     rules: rules.map((r) => r.id),
     byRule: Object.fromEntries([...perRule].filter(([, v]) => v > 0)),
   };
+  if (shots) {
+    result.data.shots = [...shots.saved].map(([file, width]) => ({ width, file })).sort((a, b) => a.width - b.width);
+    if (shots.saved.size) result.notes.push(`--shots: saved ${result.data.shots.map((s) => path.basename(s.file)).join(', ')} in ${shots.dir}`);
+    if (all.length > 1) {
+      result.notes.push(`--shots: ${all.length} pages wrote the same file names, so ${shots.dir} holds the pictures of the last page that rendered.`);
+    }
+  }
   result.code = result.unchecked.length ? UNCHECKED : n ? FAIL : PASS;
   result.summary =
     `${all.length} page(s), rules ${rules.map((r) => r.id).join(', ')} at ${widths.join('/')}px. ` +

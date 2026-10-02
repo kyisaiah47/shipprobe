@@ -183,6 +183,19 @@ or directory is served over loopback HTTP so its images can be read.
 per-width rules run at (default 1280). A page that answered HTTP 400 or more, showed a framework
 error page, or put almost nothing on the screen exits 2: there was nothing to measure.
 
+`--shots <dir>` saves a full-page PNG of the page at each width the command renders, named
+`<width>.png`. It creates the folder when it does not exist. Pictures are taken at 1280px and
+wider only. The ladder rules still measure the page at 320, 375, 414 and 768px, but those widths
+are not captured, and the run prints a note that names them. With the default rules and widths the
+folder gets `1280.png` and `1920.png`. Each `--vw` width of 1280 or more adds its own file. With
+several targets every page writes the same file names, so the folder keeps the last page's
+pictures. A picture that cannot be saved exits 2, and so does a run that renders no width of
+1280 or more.
+
+```sh
+npx shipprobe page ./dist/index.html --shots shots/
+```
+
 The contrast check is one implementation. It walks the flattened tree for the ground, skips boxes
 that are not behind the text, composites translucent layers with alpha, reads colours through the
 browser so `oklab()` and `color-mix()` resolve correctly, and multiplies opacity up the whole
@@ -351,9 +364,12 @@ ShipProbe replaces leakless, stubless, glanceless and deferless.
 | `deferless check <spec> <dir>` | `shipprobe plan <spec> <dir>` |
 | `deferless promote` | `shipprobe promote` (reads `deferless.json` too) |
 | `deferless render <url>` | `shipprobe page <url>` |
+| `deferless render <url> --shots <dir>` | `shipprobe page <url> --shots <dir>` |
 
 The npm packages `deferless` and `glanceless` now depend on ShipProbe and run it under their old
-command names. The leakless and stubless actions at `@v1` keep working.
+command names. The leakless and stubless actions at `@v1` keep working. `deferless render --shots`
+in deferless 0.1 saved a picture at every width from 320 to 1920. ShipProbe saves the widths of
+1280px and more, which by default are `1280.png` and `1920.png`.
 
 ## Limitations
 

@@ -47,6 +47,7 @@ deps       --fail-on low|medium|high|critical (default high)
 agents-md  --threshold 0-100 (default 60)  --per-file-threshold 0-100
 page       --only <ids>  --skip <ids>  --vw <widths> (default 1280)  --home <url>
            --sample <n> (interior routes from sitemap.xml)  --accent <colour|--var>  --settle <ms>
+           --shots <dir> (save <width>.png at each rendered width of 1280px or more)
 promote    --repo <dir>  --url <url>  --config <file>
 
 Exit codes: 0 pass, 1 fail, 2 could not check, 3 never produced.
@@ -54,11 +55,15 @@ There is no --force, no allowlist and no known-issues file.`;
 
 const COMMON_BOOL = ['json', 'quiet', 'github', 'hosted', 'fix', 'help'];
 const COMMON_VALUE = ['provider', 'model', 'base-url', 'fix-out', 'repo'];
+/* A FLAG'S VALUE IS NOT A TARGET. `--sample 3` and `--shots out/` each put a bare token in argv.
+ * The first deferless render gate filtered argv for targets without knowing which flags take a
+ * value, read the `3` as a URL and failed on it once per run. Every flag in a `value` list below
+ * takes the next token as its value, so that token never reaches the target list. */
 const FLAGS = {
   security: { bool: ['owner-confirmed'], value: ['min-grade', 'supabase-url'] },
   deps: { bool: [], value: ['fail-on'] },
   'agents-md': { bool: [], value: ['threshold', 'per-file-threshold'] },
-  page: { bool: ['sitemap'], value: ['only', 'skip', 'vw', 'home', 'sample', 'accent', 'settle'] },
+  page: { bool: ['sitemap'], value: ['only', 'skip', 'vw', 'home', 'sample', 'accent', 'settle', 'shots'] },
   plan: { bool: [], value: [] },
   promote: { bool: [], value: ['url', 'config'] },
   init: { bool: [], value: [] },

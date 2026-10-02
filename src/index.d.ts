@@ -68,7 +68,7 @@ export function agentFileFormat(path: string): { kind: string; name: string } | 
 
 export function runPage(
   targets: string[],
-  opts?: { only?: string; skip?: string; vw?: string; home?: string; sample?: number | string; accent?: string; settle?: number | string },
+  opts?: { only?: string; skip?: string; vw?: string; home?: string; sample?: number | string; accent?: string; settle?: number | string; shots?: string },
 ): Promise<Result>;
 export function runPlan(spec: string, outputDir: string): Result;
 export function runPromote(opts?: { repo?: string; url?: string; config?: string }, io?: { log?: (s: string) => void }): Promise<Result>;
