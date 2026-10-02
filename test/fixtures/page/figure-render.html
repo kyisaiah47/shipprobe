@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: a render does not</title>
+<!-- A smooth plate carrying heavy film grain, at the full column. It FAILS. The grain measures
+     2.4% on a naive per-pixel laplacian and 0.87% once the 2x box-downsample and the horizontal
+     run test are applied. Remove either and this fixture passes on noise alone, which is exactly
+     how the first version of the metric was wrong. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#FEFAF3;color:#241f18}
+  .lp-sec{background:#F1EADD;padding:56px 0}
+  .lp-wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+  figure{margin:0}
+  figure img{display:block;width:100%;height:auto;border-radius:8px}
+  p{max-width:none}
+</style>
+<section class="lp-sec"><div class="lp-wrap">
+  <p>The section's argument, at the page's own measure, with the picture underneath it filling the same column every other section on this page uses.</p>
+  <figure><img src="figure-render.png"></figure>
+</div></section>

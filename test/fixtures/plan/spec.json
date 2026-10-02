@@ -1,0 +1,10 @@
+{
+  "source": "test/fixtures/plan/PLAN.md",
+  "checks": [
+    { "kind": "files", "glob": "docs/*.md", "min": 3, "max": 3, "quote": "Ship exactly three endpoint pages: orders, refunds and webhooks." },
+    { "kind": "requires", "glob": "docs/*.md", "patterns": ["curl -"], "quote": "Every endpoint page carries a runnable curl example." },
+    { "kind": "pairedFile", "glob": "docs/*.md", "ext": ".json", "quote": "Every endpoint page has a matching .json schema file beside it." },
+    { "kind": "forbids", "glob": "**/*.md", "patterns": ["billing-core"], "quote": "No page names the internal service billing-core." },
+    { "kind": "sidecar", "manifest": "build.json", "field": "sourceCommit", "quote": "The build records the commit it came from in build.json, under sourceCommit." }
+  ]
+}

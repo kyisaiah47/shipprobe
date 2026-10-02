@@ -1,0 +1,81 @@
+<!doctype html><meta charset="utf-8"><title>contrast fixture: every guard, and nothing fires</title>
+<!-- CLEAN. Every block on this page is a shape that made an earlier version of the contrast rule
+     report a finding on a page that renders correctly. A rule that fabricates findings gets
+     switched off, which costs more than the defect it was written for, so each of these is pinned
+     here: if a guard is deleted, this fixture starts failing and the suite says which one. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:#0d0d0d;color:#e6e6e6;font:16px/1.6 system-ui,sans-serif}
+  main{max-width:1000px;margin:0 auto;padding:40px}
+  h2{font-size:22px;margin:32px 0 8px;color:#e6e6e6}
+  .card{position:relative;height:220px;margin:16px 0;overflow:hidden;border-radius:8px}
+  .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .card .label{position:relative;z-index:2;padding:24px;color:#ffffff;font-size:20px}
+  details p{color:#242424}
+  .blend{mix-blend-mode:difference;color:#0d0d0d;font-size:20px}
+  .guides{position:absolute;inset:0;pointer-events:none}
+  .editor{position:relative;height:60px}
+  .editor pre{position:absolute;inset:0;margin:0;color:#e6e6e6;font:14px/1.4 ui-monospace,monospace}
+  .editor textarea{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;color:transparent;caret-color:#e6e6e6;font:14px/1.4 ui-monospace,monospace}
+  button{background:#e6e6e6;color:#0d0d0d;border:0;padding:10px 16px;font-size:16px;border-radius:6px}
+</style>
+<div aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-tick" viewBox="0 0 16 16"><g fill="currentColor"><path d="M2 8 C 4 10, 5 11, 6 12 L 14 3 L 12 2 L 6 9 Z"/></g></symbol>
+    <symbol id="i-dot" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="rgba(255,255,255,0.05)"/></symbol>
+    <symbol id="i-guide" viewBox="0 0 16 16"><path d="M7 0.5v13M0.5 7h13" fill="none" stroke="rgba(255,255,255,0.06)"/></symbol>
+  </svg>
+</div>
+<div style="display:contents;background:#ffffff">
+<main>
+  <h1>Guards</h1>
+
+  <h2>A photograph behind the text</h2>
+  <!-- The card paints its picture with an absolutely positioned img sibling, so no ancestor
+       carries a background at all and the walk would fall through to the canvas. White label text
+       over a photograph was reported as white on white at 1:1, twenty times on one page. -->
+  <div class="card"><img src="figure-capture.png" alt=""><div class="label">A label over a photograph</div></div>
+
+  <h2>A closed details panel</h2>
+  <!-- Closed details content is laid out and never painted, and its box sits below its own
+       details box, so the walk correctly declines the panel behind it and falls through. -->
+  <details><summary>A question a reader can see</summary><p>An answer that is laid out and never painted, in ink that would fail against anything.</p></details>
+
+  <h2>A difference blend</h2>
+  <!-- A blended element does not paint the colour it declares, so its declared colour is not a
+       measurement. Sampling the real pixels of one of these returned a completely different
+       colour that clears the floor. -->
+  <p class="blend">This line is composited, so the value in the stylesheet was never on screen.</p>
+
+  <h2>A sprite glyph whose fill is currentColor on a wrapper</h2>
+  <!-- currentColor inside a symbol resolves against the REFERENCING svg, not against the symbol,
+       and a symbol is never rendered so its own computed colour is the document default, black.
+       Reading that reported a bright mark as black on near-black. -->
+  <p><svg width="28" height="28" style="color:#e6e6e6"><use href="#i-tick"/></svg></p>
+
+  <h2>A motif, drawn nine times</h2>
+  <!-- A shape that appears over and over, never beside a word and never inside a control, cannot
+       identify anything, because there is nothing it tells apart. -->
+  <p>
+    <svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg>
+    <svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg>
+    <svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg><svg width="18" height="18"><use href="#i-dot"/></svg>
+  </p>
+
+  <h2>A grid guide</h2>
+  <!-- An unclosed run of straight segments, no label, not inside a control, drawn to be faint.
+       Nothing scans for a grid guide, and eight of them stood in front of the real findings. -->
+  <div style="position:relative;height:120px">
+    <svg class="guides" width="400" height="120"><path d="M0.5,0.5 H369.5 V119.5" fill="none" stroke="rgba(255,255,255,0.06)"/></svg>
+  </div>
+
+  <h2>An ornamental mark inside a labelled control</h2>
+  <button><svg width="16" height="16" aria-hidden="true"><path d="M2 8 C 4 10, 5 11, 6 12 L 14 3 L 12 2 L 6 9 Z" fill="#1a1a1a"/></svg> Save the draft</button>
+
+  <h2>A transparent editor over a highlight layer</h2>
+  <!-- A control at colour transparent with a visible caret, over a pre that paints the same
+       string. The reader reads the pre. All three signals are required: alpha-zero ink on its own
+       stays a finding. -->
+  <div class="editor"><pre>const total = rows.length;</pre><textarea spellcheck="false">const total = rows.length;</textarea></div>
+</main>
+</div>

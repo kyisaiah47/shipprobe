@@ -1,0 +1,6 @@
+{
+  "name": "thumbs",
+  "version": "2.4.1",
+  "description": "A thumbnailer the demo app vendors. Its install script downloads a prebuilt binary.",
+  "scripts": { "install": "node scripts/install.js" }
+}

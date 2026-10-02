@@ -1,0 +1,1 @@
+{ "source": "test/fixtures/plan/PLAN.md", "checks": [ { "kind": "forbids", "glob": "**/*.md", "patterns": ["billing-core"], "quote": "No page names the internal service billing-core." } ] }

@@ -1,0 +1,20 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: two columns with text beside it</title>
+<!-- One column of a two column section, with real prose in the other. It PASSES, either side.
+     The text blocks beside a tall picture are SHORT, which is why the overlap is measured against
+     the shorter of the two boxes: a real card puts a 73px title beside a 463px shot, and requiring
+     35% of the picture refused exactly that layout. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#0b0d12;color:#e8eaf0}
+  .outer{max-width:1240px;margin:0 auto;padding:40px 0}
+  .card{display:grid;grid-template-columns:673px 1fr;gap:32px;align-items:center}
+  .card img{display:block;width:100%;height:auto;border-radius:16px}
+  .side{align-self:center}
+</style>
+<div class="outer"><div class="card">
+  <img src="figure-render.png">
+  <div class="side">
+    <h3>A title in the other column</h3>
+    <p>A short summary in the other column, the length a real card carries rather than the length that happens to match the picture.</p>
+  </div>
+</div></div>

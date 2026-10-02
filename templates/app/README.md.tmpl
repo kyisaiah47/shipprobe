@@ -1,0 +1,24 @@
+# __APP_NAME__
+
+A Next.js app that runs [ShipProbe](https://github.com/kyisaiah47/shipprobe) checks on its own
+server. It was scaffolded with `shipprobe --app __MODE__`.
+
+```sh
+npm install
+npm run dev
+```
+
+The app runs three checks:
+
+- a security scan of a deployed URL, which needs the visitor to confirm they own the app or are
+  authorised to scan it;
+- an install-time check of an npm package;
+- a score for a pasted AGENTS.md, CLAUDE.md or similar file.
+
+Page, plan and promote checks need a browser or a repository on disk, so they run from the CLI:
+`npx shipprobe page <url>`.
+
+The security route refuses literal private and loopback addresses. Set
+`SHIPPROBE_ALLOW_PRIVATE=1` to scan a host on your own network. A public hostname that resolves
+to a private address is not caught by that check, so run a public deployment behind an egress
+proxy if that matters to you.

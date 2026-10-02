@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: a tile in a row is not a column</title>
+<!-- Measured on a live page at 1440px, 2026-09-04: a 920x518 tile in a horizontally scrolling row,
+     with a 565px caption inside the tile's own card. A walk that stops at the FIRST ancestor
+     holding any prose measures the picture against that caption and reports "163% of its column",
+     which is the tell that it measured something INSIDE the picture. The column has to be at least
+     as wide as the picture, or it is not the column. It PASSES. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#FEFAF3;color:#241f18}
+  .row{display:flex;gap:24px;overflow-x:auto;padding:40px 24px}
+  .tile{flex:0 0 920px}
+  .tile img{display:block;width:920px;height:518px;object-fit:cover;border-radius:12px}
+  .cap{width:565px;padding-top:12px}
+</style>
+<div class="row">
+  <div class="tile">
+    <img src="figure-render.png">
+    <div class="cap"><p>A caption inside the tile's own card, narrower than the picture it belongs to, which is exactly the thing a column is not.</p></div>
+  </div>
+  <div class="tile">
+    <img src="figure-render.png">
+    <div class="cap"><p>A second tile in the same row, so the row is a row rather than one picture at the page's measure.</p></div>
+  </div>
+</div>

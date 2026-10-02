@@ -1,0 +1,67 @@
+name: gates
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  scrub:
+    # Fails closed on personal data, account handles, key-shaped strings and bot-detection
+    # bypass code anywhere in the repository. It runs first and on its own.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: scrub gate self-test
+        run: node scripts/scrub-gate.mjs --self-test
+      - name: scrub gate
+        run: node scripts/scrub-gate.mjs
+
+  test:
+    runs-on: ubuntu-latest
+    needs: scrub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      # Playwright is a dev-only peer. ShipProbe itself has no runtime dependency.
+      - name: install playwright
+        run: |
+          npm install --no-save --no-package-lock playwright@1
+          npx playwright install --with-deps chromium
+      - name: tests
+        run: node test/run.mjs
+      - name: worked example
+        run: node examples/run.mjs
+
+  self-check:
+    # The action checks its own repository: the agent file, through the same action.yml users run.
+    runs-on: ubuntu-latest
+    needs: scrub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          command: agents-md
+          args: '. --threshold 80'
+
+  app:
+    # The --app scaffold, built for real in every mode against the packed package.
+    runs-on: ubuntu-latest
+    needs: scrub
+    strategy:
+      matrix:
+        mode: [console, simple, both]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: pack, scaffold, install, build
+        run: |
+          npm pack --pack-destination "$RUNNER_TEMP"
+          node bin/shipprobe.mjs --app ${{ matrix.mode }} "$RUNNER_TEMP/app"
+          cd "$RUNNER_TEMP/app"
+          npm pkg set dependencies.shipprobe="file:$(ls "$RUNNER_TEMP"/shipprobe-*.tgz)"
+          npm install --no-audit --no-fund
+          npx next build

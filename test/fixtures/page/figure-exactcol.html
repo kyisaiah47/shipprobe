@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: a picture that exactly fills its reading column</title>
+<!-- The regression that made this rule green on the one shape it was built for. Measured on a live
+     article at 1440px, 2026-09-04: a 1240px wrapper holding an 860px reading column holding an
+     860x860 render. The old column walk wanted an ancestor STRICTLY WIDER than the picture, so it
+     skipped the 860 column, landed on the 1240 wrapper, computed 69% and printed a tick. It FAILS
+     now, which is the point. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#0b0d12;color:#e8eaf0}
+  .outer{max-width:1240px;margin:0 auto;padding:40px 0}
+  .inner{max-width:860px}
+  .shot{border-radius:16px;overflow:hidden}
+  .shot img{display:block;width:100%;height:auto}
+</style>
+<div class="outer"><article class="inner">
+  <h1>An article whose reading column is 860px wide</h1>
+  <p>The reading column of this article is 860px wide and the picture underneath fills every pixel of it, which is the shape this rule exists to refuse and the one it could not see.</p>
+  <div class="shot"><img src="figure-render.png"></div>
+</article></div>

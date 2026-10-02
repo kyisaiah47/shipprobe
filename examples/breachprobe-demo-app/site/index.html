@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>demo-app: notes that sync</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:17px/1.6 system-ui,sans-serif;background:#ffffff;color:#14181f}
+  header,footer{border-bottom:1px solid #dde2e8;padding:16px 32px}
+  footer{border-top:1px solid #dde2e8;border-bottom:0;margin-top:48px;color:#3f4854}
+  nav{display:flex;flex-wrap:wrap;gap:8px 24px}
+  nav a,footer a{color:#14181f;white-space:nowrap}
+  main{max-width:1120px;margin:0 auto;padding:40px 32px}
+  h1{font-size:42px;line-height:1.15;margin:0 0 16px}
+  .btn{display:inline-block;background:#14181f;color:#ffffff;padding:12px 20px;border-radius:8px;text-decoration:none}
+  label{display:block;font-weight:600;margin:16px 0 6px}
+  input{font:17px system-ui,sans-serif;padding:10px 12px;border:1px solid #8a94a3;border-radius:8px;width:100%;max-width:420px}
+</style>
+<header><nav aria-label="Main"><a href="/">demo-app</a><a href="/signup.html">Sign up</a><a href="/privacy.html">Privacy</a></nav></header>
+<main>
+  <h1>Notes that sync between your devices</h1>
+  <p>demo-app is a demo notes app. You write a note on your laptop and it is on your phone a second later.
+  Every note is stored in a hosted database, and the app reads and writes it from the browser with the
+  database's public key.</p>
+  <p>This site is the worked example from BreachProbe, rebuilt as a local fixture. It carries the same
+  defects the BreachProbe sample report finds: database tables anyone can read, a missing
+  Content-Security-Policy and Referrer-Policy, an admin check in the browser, and a session token kept in
+  localStorage.</p>
+  <p><a class="btn" href="/signup.html">Create an account</a></p>
+</main>
+<footer><p>demo-app is a demo. <a href="/">Home</a> · <a href="/privacy.html">Privacy policy</a></p></footer>
+<script type="module" src="/assets/app.js"></script>
+</html>

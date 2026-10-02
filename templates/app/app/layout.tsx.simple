@@ -1,0 +1,19 @@
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import CheckState from '@/components/CheckState';
+import './globals.css';
+
+export const metadata: Metadata = {
+  title: 'ShipProbe checks',
+  description: 'Security, package and agent-file checks, run on this server with ShipProbe.',
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <CheckState>{children}</CheckState>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>shipprobe fixtures: a page every rule fires on</title>
+<!-- Every defect here renders. Nothing overflows, nothing clips, no console error, no failed
+     build. A person looking at the page is the only thing that catches any of it, which is the
+     condition this tool exists to end. One finding per rule, seven in all.
+
+     The card below is the no-stat-eyebrow rule's negative fixture: it carries the banned register
+     on purpose, so there is something for that rule to fire on. It is a test case, not a pattern
+     to copy. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}
+  main{max-width:1136px;margin:0 auto;padding:40px 32px}
+  h1{font-size:40px;line-height:1.15;margin:0 0 20px}
+  h2{font-size:26px;margin:44px 0 12px}
+  .narrow{max-width:620px}
+  .faint{color:#b3b3b3}
+  figure{margin:32px 0}
+  figure img{display:block;width:100%;height:auto;border-radius:8px}
+  table{border-collapse:collapse;width:100%;margin-top:16px}
+  th,td{border:1px solid #d6d6d6;padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  thead th{background:#f4f4f4}
+  th[scope=row]{width:15rem}
+  .card{background:#f4f4f4;padding:40px 32px;margin:44px 0;text-align:center}
+  .card .fig{font-size:178px;line-height:1.1;font-weight:700}
+  .card .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:23px;color:#3d3d3d;margin-top:12px}
+</style>
+<main>
+  <h1>A page nobody looked at, and every check passed it</h1>
+  <p>It builds, it deploys, it answers 200, and there is no nav on it, no footer, and no anchor
+  anywhere that goes back to the root. A reader who lands here has nowhere to go.</p>
+
+  <h2>Prose that stops at half the measure</h2>
+  <div class="narrow">
+    <p>The two decisions that produce this are each correct on their own. Cap the measure so a
+    line of prose is readable, and keep the block's left edge on the column every other section
+    shares. Put them together and the page uses half of the width it has already established, down
+    several screens, with nothing painted beside it.</p>
+    <p>Nothing overflows. Nothing clips. No contrast fails on this block, no label wraps, and every
+    other check in a normal pipeline passes it. The page simply reads as unbuilt, and the only way
+    to know is to look at it.</p>
+    <p>The measurement is the page against itself. There is no width a block is supposed to be, so
+    the reference is this document's own ninetieth-percentile content edge, and a run of rows is
+    reported when it stops far short of that edge while still starting on the page's normal left
+    margin. A block centred in the same frame is left alone, because the slack is split and the
+    page reads as composed.</p>
+    <p>This block runs long enough to clear the run floor, which is two hundred and forty pixels of
+    contiguous dead height. A short band under a heading is not this defect and is not reported as
+    one, which is why the height counted is the dead rows themselves rather than the span from the
+    first of them to the last.</p>
+  </div>
+
+  <h2>A render at the full measure</h2>
+  <figure>
+    <img src="figure-render.png" alt="A smooth plate.">
+  </figure>
+
+  <h2>A number as the subject of a card</h2>
+  <div class="card">
+    <div class="fig">178</div>
+    <div class="eyebrow">The size the figure shipped at</div>
+  </div>
+
+  <h2>A table holding facts</h2>
+  <table>
+    <thead>
+      <tr><th scope="col">Term</th><th scope="col">Reads</th><th scope="col">Fails on</th><th scope="col">Widths</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">A row label that is a whole sentence written for a data file rather than for a reader to scan</th><td>Computed colour</td><td>Ratio under the floor</td><td>All</td></tr>
+      <tr><th scope="row">Coverage</th><td colspan="3">One value stretched across every data column, which is a fact and not a comparison, and a comparison table is the worst container there is for a fact.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Ink nobody can read</h2>
+  <p class="faint">This paragraph is set in a grey that measures about two to one against the white
+  behind it, which is under half of what WCAG 1.4.3 asks for at this size. It looks like a design
+  decision in a screenshot and it is unreadable on a laptop in daylight.</p>
+
+  <h2>Copy that would fit any other product</h2>
+  <p>Designed to help teams seamlessly streamline their filings and unlock powerful insights.</p>
+</main>

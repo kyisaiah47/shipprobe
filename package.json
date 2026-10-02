@@ -1,0 +1,80 @@
+{
+  "name": "shipprobe",
+  "version": "0.1.0",
+  "description": "One tool for shipping safely. Security, dependency, agent-instruction, rendered-page and plan checks, each measured with selectors and numbers. It fails closed and runs offline.",
+  "type": "module",
+  "bin": {
+    "shipprobe": "bin/shipprobe.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.mjs"
+    },
+    "./security": "./src/security/index.mjs",
+    "./deps": "./src/deps/index.mjs",
+    "./agents-md": "./src/agents-md/index.mjs",
+    "./page": "./src/page/index.mjs",
+    "./plan": "./src/plan/index.mjs",
+    "./promote": "./src/promote/index.mjs",
+    "./fix": "./src/fix/index.mjs",
+    "./cli": "./src/cli.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates",
+    "examples",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test/run.mjs",
+    "scrub": "node scripts/scrub-gate.mjs",
+    "example": "node examples/run.mjs",
+    "demo": "node bin/shipprobe.mjs demo"
+  },
+  "keywords": [
+    "security",
+    "supabase",
+    "row-level-security",
+    "npm",
+    "supply-chain",
+    "agents-md",
+    "claude-md",
+    "accessibility",
+    "wcag",
+    "contrast",
+    "playwright",
+    "ci",
+    "github-actions",
+    "gate",
+    "fail-closed",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "author": "Compound Labs (https://thecompound.tech)",
+  "homepage": "https://shipprobe.thecompound.tech",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyisaiah47/shipprobe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyisaiah47/shipprobe/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "playwright": ">=1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
+  "types": "./src/index.d.ts"
+}

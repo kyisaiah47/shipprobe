@@ -1,0 +1,39 @@
+<!doctype html><meta charset="utf-8"><title>contrast fixture: a glyph nobody can see, and a duotone that collapsed</title>
+<!-- FAILS, twice. The first mark is the defect that put glyph measurement into this rule at all:
+     a mark at 1.9 to 1 that every probe counted as present because it was in the DOM at the right
+     size in the right place. The second is a two-tone glyph whose plate has been forced opaque, so
+     it is drawn as two tones and paints as one shape.
+
+     The surrounding paragraphs exist so this page clears the render-failure floor in rendered.mjs
+     (8% ink, 400 characters of text). Without them the page is sparse enough that the blank-page
+     guard reports "nothing rendered" before the contrast rule ever runs, which turns an intended
+     finding into a false could-not-check. A minimal reproduction of a real defect still has to
+     look like a real page to the same check every other route is measured against. -->
+<style>
+  body{margin:0;background:#ffffff;color:#1a1a1a;font:16px/1.6 system-ui,sans-serif}
+  main{max-width:800px;margin:0 auto;padding:40px}
+  .flat path{opacity:1}
+</style>
+<main>
+  <h1>Two marks</h1>
+  <p>This page carries two glyphs and nothing else worth measuring, which is on purpose: each one
+  is a specific way a mark can render at the right size, in the right place in the DOM, and still
+  fail the contrast a reader actually needs to see it. Neither defect shows up by reading the
+  stylesheet. Both only show up by reading the pixels a browser actually paints.</p>
+  <p>An unlabelled mark, on its own, at the edge of visible:</p>
+  <div><svg width="28" height="28" viewBox="0 0 24 24"><path fill="#ffae21" d="M4 4 C 8 2, 12 6, 20 4 L 20 20 C 14 22, 8 18, 4 20 Z"/></svg></div>
+  <p>This first mark measures under two to one against the white page behind it, which clears no
+  contrast floor at any size. It is the shape of defect that put glyph measurement into this rule
+  at all: a mark that every earlier check counted as present because it existed in the document at
+  the right size and the right position, without ever asking whether a reader could actually see
+  the shape it draws.</p>
+  <p>A two-tone mark whose plate has been overridden to full opacity:</p>
+  <div><svg class="flat" width="28" height="28" viewBox="0 0 24 24" style="color:#1a1a1a">
+    <path opacity=".5" fill="currentColor" d="M2 12 C 2 6, 6 2, 12 2 C 18 2, 22 6, 22 12 C 22 18, 18 22, 12 22 C 6 22, 2 18, 2 12 Z"/>
+    <path fill="currentColor" d="M9 12 C 9 10, 10 9, 12 9 C 14 9, 15 10, 15 12 C 15 14, 14 15, 12 15 C 10 15, 9 14, 9 12 Z"/>
+  </svg></div>
+  <p>This second mark is supposed to be two tones: a plate at half opacity under a solid inner
+  shape, which is how a duotone glyph is normally drawn. Its plate has been forced back to full
+  opacity here, so the two paths collapse into one flat shape, and the separation a duotone glyph
+  depends on is gone even though each path still passes an ordinary contrast check on its own.</p>
+</main>

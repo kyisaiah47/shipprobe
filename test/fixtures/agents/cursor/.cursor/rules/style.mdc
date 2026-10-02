@@ -1,0 +1,7 @@
+---
+description: House style
+globs: src/**/*.ts
+---
+# Style
+
+Run `npm run lint` before every commit. Never use `any`.

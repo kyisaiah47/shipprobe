@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>shipprobe fixtures: the front page</title>
+<!-- The reference front page for the page-chrome rule. Its nav destinations are what an interior
+     route is measured against, because there is no absolute definition of "this site's chrome",
+     only what this site puts on its own front page. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}
+  header,footer{background:#f4f4f4;padding:20px 32px}
+  nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+  nav a{color:#161616;white-space:nowrap}
+  main{max-width:1136px;margin:0 auto;padding:40px 32px}
+  h1{font-size:40px;line-height:1.15;margin:0 0 20px}
+</style>
+<header>
+  <nav>
+    <a href="/">Fixtures</a>
+    <a href="/clean.html">Clean page</a>
+    <a href="/dirty.html">Failing page</a>
+  </nav>
+</header>
+<main>
+  <h1>The fixture site</h1>
+  <p>Three pages. One of them carries the chrome, the width, the contrast, the pictures, the
+  tables and the copy this tool measures. The other one does not, and every one of its defects
+  renders without an error.</p>
+  <p>This page exists so the chrome rule has a front page to compare an interior route against.
+  Its nav holds three internal destinations, so a route passes when it carries two of them.</p>
+</main>
+<footer>
+  <p><a href="/">Back to the fixture site</a></p>
+</footer>

@@ -1,0 +1,9 @@
+{
+  "source": "docs/PLAN.md",
+  "checks": [
+    { "kind": "files", "glob": "*.html", "min": 3, "max": 3, "quote": "The site ships three pages: the landing page, the sign-up page and the privacy policy." },
+    { "kind": "requires", "glob": "*.html", "patterns": ["href=\"/privacy.html\""], "quote": "Every page links to the privacy policy." },
+    { "kind": "forbids", "glob": "**/*", "patterns": ["service_role"], "quote": "No page or script ships a service_role key." },
+    { "kind": "requires", "glob": "*.html", "patterns": ["demo"], "quote": "Every page says the app is a demo." }
+  ]
+}

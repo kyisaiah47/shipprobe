@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>nested fixture: a scroll region the wheel never reaches</title>
+<!-- FAILS. A document-level wheel handler cancels every wheel and scrolls the page itself, which is
+     what a smooth-scroll library does. The inner list overflows, has a scrollbar, and never moves. -->
+<style>body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}main{max-width:960px;margin:0 auto;padding:40px 32px}
+.list{height:220px;overflow-y:auto;border:1px solid #ccc;padding:0 12px}.list p{margin:10px 0}.tall{height:2200px}</style>
+<main>
+  <h1>A dead scroll region</h1>
+  <p>The list below holds more rows than its box shows. A reader with a trackpad puts the pointer over it
+  and scrolls, and the page moves instead of the list. Only sending a real wheel event can show that.</p>
+  <div class="list">
+    <p>Row one of the list.</p><p>Row two of the list.</p><p>Row three of the list.</p><p>Row four of the list.</p>
+    <p>Row five of the list.</p><p>Row six of the list.</p><p>Row seven of the list.</p><p>Row eight of the list.</p>
+    <p>Row nine of the list.</p><p>Row ten of the list.</p><p>Row eleven of the list.</p><p>Row twelve of the list.</p>
+  </div>
+  <div class="tall"></div>
+</main>
+<script>
+  document.addEventListener('wheel', (e) => {
+    if (e.target.closest && e.target.closest('[data-lenis-prevent]')) return;
+    e.preventDefault();
+    window.scrollBy(0, e.deltaY);
+  }, { passive: false });
+</script>

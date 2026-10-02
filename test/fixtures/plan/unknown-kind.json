@@ -1,0 +1,1 @@
+{ "source": "test/fixtures/plan/PLAN.md", "checks": [ { "kind": "vibes", "quote": "It feels right." } ] }

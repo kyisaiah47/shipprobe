@@ -1,0 +1,65 @@
+name: 'ShipProbe'
+description: 'Security, dependency, agent-instruction, rendered-page and plan checks that fail closed. One action, six commands.'
+author: 'Compound Labs'
+
+branding:
+  icon: 'shield'
+  color: 'green'
+
+inputs:
+  command:
+    description: 'security, deps, agents-md, page, plan or promote.'
+    required: true
+  args:
+    description: >-
+      The command's arguments, as you would type them after the command name. For example
+      `https://app.example.com --owner-confirmed` for security, or `plan.spec.json dist` for plan.
+    required: false
+    default: ''
+  install-browser:
+    description: >-
+      Install Playwright and Chromium before running. Needed for page, and for promote when a gate
+      runs page. Default: true for page and promote, false otherwise.
+    required: false
+    default: 'auto'
+
+outputs:
+  exit-code:
+    description: '0 pass, 1 fail, 2 could not check, 3 never produced.'
+    value: ${{ steps.shipprobe.outputs.exit-code }}
+  findings:
+    description: 'How many failing findings the run reported.'
+    value: ${{ steps.shipprobe.outputs.findings }}
+  summary:
+    description: 'The one-line summary of the run.'
+    value: ${{ steps.shipprobe.outputs.summary }}
+  score:
+    description: 'The score, for security and agents-md.'
+    value: ${{ steps.shipprobe.outputs.score }}
+  grade:
+    description: 'The grade, for security.'
+    value: ${{ steps.shipprobe.outputs.grade }}
+  report-path:
+    description: 'Path to the full JSON result, written under RUNNER_TEMP.'
+    value: ${{ steps.shipprobe.outputs.report-path }}
+
+runs:
+  using: 'composite'
+  steps:
+    # A composite action rather than a JavaScript one: ShipProbe is ESM with no build step and no
+    # dependencies, so there is no dist/ that can drift from src/.
+    - name: Install Playwright and Chromium
+      if: ${{ inputs.install-browser == 'true' || (inputs.install-browser == 'auto' && (inputs.command == 'page' || inputs.command == 'promote')) }}
+      shell: bash
+      run: |
+        npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/shipprobe-pw" playwright@1
+        npx --prefix "$RUNNER_TEMP/shipprobe-pw" playwright install --with-deps chromium
+    - id: shipprobe
+      shell: bash
+      env:
+        SHIPPROBE_COMMAND: ${{ inputs.command }}
+        SHIPPROBE_ARGS: ${{ inputs.args }}
+        SHIPPROBE_PLAYWRIGHT: ${{ runner.temp }}/shipprobe-pw/node_modules/playwright
+      run: |
+        eval "set -- $SHIPPROBE_ARGS"
+        node "$GITHUB_ACTION_PATH/bin/shipprobe.mjs" "$SHIPPROBE_COMMAND" "$@" --github

@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: a background cover is not a figure</title>
+<!-- A hero: a picture with content painted over it. It PASSES. The first version of the carve
+     wanted 70% of the sample points covered, and that is why it refused correct heroes, because a
+     hero holds one card over a wide photograph and most of the picture is bare by design.
+     Measured across a whole sweep: correct heroes scored 15/25, 9/25, 5/25 and 2/25, and every
+     picture called wrong scored 0/25, with nothing between 0 and 2. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#0b0d12;color:#fff}
+  .hero{position:relative;height:607px;overflow:hidden}
+  .hero-bg{position:absolute;inset:0}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:120px 24px;text-align:center}
+  .hero-inner h1{font-size:56px;line-height:1.05;margin:0 0 18px}
+</style>
+<div class="hero">
+  <div class="hero-bg"><img src="figure-render.png"></div>
+  <div class="hero-inner">
+    <h1>A headline painted over the cover</h1>
+    <p>A sentence painted over the cover, which is what makes the picture a ground rather than a figure taking the measure.</p>
+  </div>
+</div>

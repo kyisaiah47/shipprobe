@@ -1,0 +1,8 @@
+{
+  "serve": { "command": ["node", "../serve.mjs", "site", "4178"], "url": "http://127.0.0.1:4178", "readyTimeoutMs": 15000 },
+  "gates": [
+    { "name": "plan", "shipprobe": ["plan", "plan.spec.json", "site"] },
+    { "name": "agent file", "shipprobe": ["agents-md", "."] },
+    { "name": "sign-up page", "shipprobe": ["page", "{url}/signup.html", "--only", "contrast,visible,clipped,page-chrome,noise", "--settle", "300"] }
+  ]
+}

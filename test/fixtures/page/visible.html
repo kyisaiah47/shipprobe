@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>visible fixture: a headline nobody can see</title>
+<!-- FAILS. The h1 holds an animation's start frame at opacity 0.001, so it occupies the hero and
+     paints nothing. The watermark beside it is at 0.07 and declares itself aria-hidden, so it is
+     decoration and is not reported. -->
+<style>body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}main{max-width:960px;margin:0 auto;padding:40px 32px}
+h1{font-size:44px;opacity:.001}.mark{font-size:120px;opacity:.07}</style>
+<main>
+  <h1>The headline a reader came for</h1>
+  <div class="mark" aria-hidden="true">WATERMARK</div>
+  <p>This paragraph is fully painted. The heading above it is in the document at the right size, in
+  the right colour and in the right place, and a reader sees an empty hero, because an entrance
+  animation was left on its first frame. A grep cannot find that. Measuring the opacity of the whole
+  ancestor chain, on the rendered page, can.</p>
+  <p>The second paragraph is here so the page clears the blank-page floor, which refuses to judge a
+  page that put almost nothing on the screen. A minimal reproduction of a real defect still has to
+  look like a real page to the same check every route is measured against.</p>
+</main>

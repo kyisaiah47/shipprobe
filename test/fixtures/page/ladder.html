@@ -1,0 +1,16 @@
+<!doctype html><meta charset="utf-8"><title>ladder fixture: overflow, a wrapped label and a low headline</title>
+<!-- FAILS three ways. A 600px panel scrolls the page sideways on a phone. A nav label is boxed
+     too narrow and breaks onto two lines at every width. The headline sits below the fold at
+     1280x800. -->
+<style>body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}main{padding:24px}
+.wide{width:600px;border:1px solid #ccc;padding:12px}.narrow{display:inline-block;width:56px}
+h1{margin-top:900px}</style>
+<header><nav><a href="/">Home</a> <a class="narrow" href="/method">Read the method</a></nav></header>
+<main>
+  <div class="wide">This panel is six hundred pixels wide whatever the screen is, so a phone scrolls sideways to read it.</div>
+  <p>The paragraphs on this page exist so it clears the blank-page floor. A layout defect is only worth
+  reporting on a page that put something on the screen, and this one puts enough text on it to count.
+  The headline below is pushed past the fold by a large top margin, so a reader on a laptop never sees it
+  without scrolling.</p>
+  <h1>The headline below the fold</h1>
+</main>

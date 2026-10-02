@@ -1,0 +1,25 @@
+'use client';
+
+import { useSiteView } from './SiteViewProvider';
+
+/* Both views and Start here, at the foot of the page in both views. */
+export default function ViewControls() {
+  const mode = useSiteView();
+  if (!mode) return null;
+  return (
+    <div className="sv-tools">
+      <div role="group" aria-label="Page view">
+        <span>Your view</span>
+        <button type="button" onClick={() => mode.choose('console')} aria-pressed={mode.view === 'console'}>
+          Console
+        </button>
+        <button type="button" onClick={() => mode.choose('simple')} aria-pressed={mode.view === 'simple'}>
+          Simple
+        </button>
+      </div>
+      <button type="button" onClick={mode.welcome}>
+        Start here
+      </button>
+    </div>
+  );
+}

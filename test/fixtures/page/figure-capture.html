@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: a capture earns the column</title>
+<!-- Dense at 22.71% of the downsampled plane, 744px tall. It PASSES. Drop the density test and
+     this fires, and the tool is back to refusing a capture of an interface at the width the
+     section's own prose uses, which is the composition the rule exists to allow. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#FEFAF3;color:#241f18}
+  .lp-sec{background:#F1EADD;padding:56px 0}
+  .lp-wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+  figure{margin:0}
+  figure img{display:block;width:100%;height:auto;border-radius:8px}
+  p{max-width:none}
+</style>
+<section class="lp-sec"><div class="lp-wrap">
+  <p>The section's argument, at the page's own measure, with the picture underneath it filling the same column every other section on this page uses.</p>
+  <figure><img src="figure-capture.png"></figure>
+</div></section>

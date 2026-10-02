@@ -1,0 +1,16 @@
+<!doctype html><meta charset="utf-8"><title>figure fixture: too tall to study</title>
+<!-- The dense capture, forced to 1400px. It FAILS. Density is not a licence for a wall: a figure
+     a reader cannot take in on one screen is a wall, whatever is printed on it. -->
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#FEFAF3;color:#241f18}
+  .lp-sec{background:#F1EADD;padding:56px 0}
+  .lp-wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+  figure{margin:0}
+  figure img{display:block;width:100%;height:auto;border-radius:8px}
+  p{max-width:none}
+</style>
+<section class="lp-sec"><div class="lp-wrap">
+  <p>The section's argument, at the page's own measure, with the picture underneath it filling the same column every other section on this page uses.</p>
+  <figure><img src="figure-capture.png" style="height:1400px;object-fit:cover"></figure>
+</div></section>

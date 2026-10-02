@@ -1,0 +1,1 @@
+{ "source": "test/fixtures/plan/PLAN.md", "checks": [ { "kind": "files", "glob": "site/*.html", "min": 1, "quote": "The site has at least one page." } ] }

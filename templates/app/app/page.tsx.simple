@@ -1,0 +1,14 @@
+import SimpleHome from '@/components/SimpleHome';
+import Footer from '@/components/Footer';
+import { exampleScore } from '@/lib/example';
+
+export const dynamic = 'force-dynamic';
+
+export default function Home() {
+  return (
+    <>
+      <SimpleHome example={exampleScore()} />
+      <Footer />
+    </>
+  );
+}

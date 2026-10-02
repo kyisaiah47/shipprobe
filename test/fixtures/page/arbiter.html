@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>arbiter fixture: white text over a dark picture</title>
+<!-- PASSES. The headline is white and every ancestor is transparent over a white page, so the
+     stylesheet says white on white at 1:1. A dark picture is painted beneath it by a sibling. The
+     pixels say about 18:1, and the pixels overrule the stylesheet in that direction. -->
+<style>body{margin:0;font:16px/1.6 system-ui,sans-serif;background:#fff;color:#161616}
+.hero{position:relative;height:420px}.hero img{position:absolute;inset:0;width:100%;height:100%}
+.hero h1{position:relative;color:#fff;margin:0;padding:120px 48px 0;font-size:48px}main{max-width:960px;margin:0 auto;padding:40px 32px}</style>
+<div class="hero">
+  <img alt="" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Crect width='10' height='10' fill='%23101418'/%3E%3C/svg%3E">
+  <h1>Readable over the picture</h1>
+</div>
+<main>
+  <p>The headline above is measured twice. The stylesheet walk climbs past the picture, which is a
+  sibling rather than an ancestor, and reaches the white page. The pixel arbiter hides every glyph,
+  captures the viewport and measures the backdrop the reader actually sees.</p>
+  <p>This second paragraph keeps the page above the blank-page floor.</p>
+</main>

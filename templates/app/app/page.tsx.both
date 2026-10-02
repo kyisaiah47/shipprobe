@@ -1,0 +1,17 @@
+import ConsoleHome from '@/components/ConsoleHome';
+import SimpleHome from '@/components/SimpleHome';
+import Footer from '@/components/Footer';
+import PageViews from '@/components/site-view/PageViews';
+import ViewControls from '@/components/site-view/ViewControls';
+import { exampleScore } from '@/lib/example';
+
+export const dynamic = 'force-dynamic';
+
+export default function Home() {
+  return (
+    <>
+      <PageViews consoleView={<ConsoleHome />} simpleView={<SimpleHome example={exampleScore()} />} />
+      <Footer controls={<ViewControls />} />
+    </>
+  );
+}
