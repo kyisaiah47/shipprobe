@@ -1,5 +1,5 @@
 name: 'ShipProbe'
-description: 'Security, dependency, agent-instruction, rendered-page and plan checks that fail closed. One action, six commands.'
+description: 'This action runs security, dependency, agent-instruction, rendered-page and plan checks that fail closed. It provides one action with six commands.'
 author: 'Compound Labs'
 
 branding:
@@ -12,14 +12,12 @@ inputs:
     required: true
   args:
     description: >-
-      The command's arguments, as you would type them after the command name. For example
-      `https://app.example.com --owner-confirmed` for security, or `plan.spec.json dist` for plan.
+      The command's arguments are the arguments you would type after the command name. For example, use `https://app.example.com --owner-confirmed` for security or `plan.spec.json dist` for plan.
     required: false
     default: ''
   install-browser:
     description: >-
-      Install Playwright and Chromium before running. Needed for page, and for promote when a gate
-      runs page. Default: true for page and promote, false otherwise.
+      The action installs Playwright and Chromium before it runs. Page needs them, and promote needs them when a gate runs page. The default is true for page and promote and false otherwise.
     required: false
     default: 'auto'
 

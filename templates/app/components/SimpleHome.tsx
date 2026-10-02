@@ -58,12 +58,12 @@ export default function SimpleHome({ example }: { example: Example }) {
         <section className="band" id="example">
           <div className="band-head">
             <p className="label">02 / An example result</p>
-            <h2>A score you can act on, not a bare number.</h2>
+            <h2>The score gives you something to act on, not a bare number.</h2>
             <p>Every check names the thing it measured and the number it needed.</p>
           </div>
           {example ? (
             <div className="example-card">
-              <p className="example-tag">Example. This is computed from a file in this app, not from a scan of your site.</p>
+              <p className="example-tag">This example is computed from a file in this app, not from a scan of your site.</p>
               <p className="example-answer">
                 This app&apos;s own <code>{example.path}</code> scores {example.quality} out of 100.
               </p>
@@ -78,14 +78,14 @@ export default function SimpleHome({ example }: { example: Example }) {
               </Disclosure>
             </div>
           ) : (
-            <p>The example could not be computed: this app has no AGENTS.md at its root.</p>
+            <p>The example could not be computed because this app has no AGENTS.md at its root.</p>
           )}
         </section>
 
         <section className="band" id="more">
           <div className="band-head">
             <p className="label">03 / Two more checks</p>
-            <h2>Check a package before you install it, and an agent file before an agent reads it.</h2>
+            <h2>ShipProbe checks a package before you install it and an agent file before an agent reads it.</h2>
           </div>
           <Disclosure title="Check an npm package">
             <form

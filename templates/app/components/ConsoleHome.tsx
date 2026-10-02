@@ -23,7 +23,7 @@ export default function ConsoleHome() {
       <main className="console-grid">
         <section id="security" className="panel" aria-labelledby="security-h">
           <h2 id="security-h">Security scan</h2>
-          <p className="panel-lede">Keys in the shipped code, readable database tables, security headers, insecure patterns and payment routes.</p>
+          <p className="panel-lede">The security check looks for keys in shipped code, readable database tables, security headers, insecure patterns and payment routes.</p>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -43,7 +43,7 @@ export default function ConsoleHome() {
 
         <section id="deps" className="panel" aria-labelledby="deps-h">
           <h2 id="deps-h">Package</h2>
-          <p className="panel-lede">What an npm package runs when it installs, and whether its publishing account changed.</p>
+          <p className="panel-lede">The package check shows what an npm package runs when it installs and whether its publishing account changed.</p>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -59,7 +59,7 @@ export default function ConsoleHome() {
 
         <section id="agents-md" className="panel" aria-labelledby="agents-h">
           <h2 id="agents-h">Agent file</h2>
-          <p className="panel-lede">Scores an AGENTS.md, CLAUDE.md or similar file on length, headings, runnable commands, topics and prohibitions.</p>
+          <p className="panel-lede">The agent-file check scores an AGENTS.md, CLAUDE.md or similar file on length, headings, runnable commands, topics and prohibitions.</p>
           <form
             onSubmit={(e) => {
               e.preventDefault();

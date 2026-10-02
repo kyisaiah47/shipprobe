@@ -1,16 +1,12 @@
 # The worked example: demo-app
 
-demo-app is the app BreachProbe scans in its own worked example, rebuilt here as a local fixture.
-It is a small notes site with a browser bundle that talks to a hosted database, and it carries the
-defects BreachProbe's sample report finds.
+demo-app is the app that BreachProbe scans in its worked example. It is rebuilt here as a local fixture. It is a small notes site with a browser bundle that talks to a hosted database. It carries the defects that BreachProbe's sample report finds.
 
 ```sh
 node examples/run.mjs      # or: npx shipprobe demo
 ```
 
-Nothing leaves your machine. `serve.mjs` serves the site and a stand-in for its database on
-loopback, and signs a fresh public key for the bundle each time it starts, so no key is stored in
-this repository.
+Nothing leaves your machine. `serve.mjs` serves the site and a stand-in for its database on loopback. It signs a fresh public key for the bundle each time it starts, so no key is stored in this repository.
 
 | Step | Command | Exit |
 | --- | --- | --- |
@@ -21,15 +17,8 @@ this repository.
 | Check the site against its plan | `shipprobe plan breachprobe-demo-app/plan.spec.json breachprobe-demo-app/site` | 0 |
 | Run every gate before a deploy | `shipprobe promote --repo breachprobe-demo-app` | 1 |
 
-The local scan finds six of the eight findings in BreachProbe's sample: the readable tables, the
-enumerable schema, the missing Content-Security-Policy and Referrer-Policy, the admin check in the
-browser, and the session token in localStorage. The other two, the cross-tenant read and the
-auto-confirmed sign-ups, come from signing up two throwaway accounts, which only the hosted scan
-does (`--hosted`).
+The local scan finds six of the eight findings in BreachProbe's sample: the readable tables, the enumerable schema, the missing Content-Security-Policy and Referrer-Policy, the admin check in the browser, and the session token in localStorage. The other two findings are the cross-tenant read and the auto-confirmed sign-ups. They come from signing up two throwaway accounts, which only the hosted scan does with `--hosted`.
 
-The sign-up page's hint text is `#b9bfc8` on white. The page check measures it at 1.85:1 against
-the pixels painted behind it, under the 4.5:1 that WCAG 1.4.3 asks for, and exits 1. The promote
-step serves the site, runs the plan, agent-file and page gates against it, and is blocked by that
-same finding.
+The sign-up page's hint text is `#b9bfc8` on white. The page check measures it at 1.85:1 against the pixels painted behind it. WCAG 1.4.3 asks for 4.5:1, so the check exits 1. The promote step serves the site and runs the plan, agent-file and page gates against it. The same finding blocks the promote step.
 
 `run.mjs` exits 0 only when every command gives the exit code in this table.

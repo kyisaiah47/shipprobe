@@ -87,7 +87,7 @@ export default function Welcome() {
         </button>
       </header>
       <div className="sv-welcome-intro">
-        <h2 id="sv-welcome-title">Can a stranger see what your app should keep private?</h2>
+        <h2 id="sv-welcome-title">The security scan shows what a stranger can see in your app and what the app should keep private.</h2>
         <p>
           ShipProbe reads what your deployed app sends to every visitor, and names each key, open database table or missing
           protection it finds, with where it found it.
@@ -101,7 +101,7 @@ export default function Welcome() {
         <p>
           <code>app.example</code> ships a database key that bypasses every access rule.
         </p>
-        <p className="sv-illustration-found">Fail, critical. Found in the main script bundle. The check exits 1.</p>
+        <p className="sv-illustration-found">The check fails with a critical finding in the main script bundle and exits 1.</p>
       </section>
       <section className="sv-welcome-choose">
         <h3>How would you like to explore?</h3>
@@ -110,12 +110,12 @@ export default function Welcome() {
           <button type="button" onClick={() => select('console')}>
             <b>Console</b>
             <strong>See more at once.</strong>
-            <span>All three checks on one screen, findings as tables.</span>
+            <span>The app puts all three checks on one screen and shows findings as tables.</span>
           </button>
           <button type="button" onClick={() => select('simple')}>
             <b>Simple</b>
             <strong>Start with the essentials.</strong>
-            <span>One scan first, with details you open as you go.</span>
+            <span>The app starts with one scan and lets you open details as you go.</span>
           </button>
         </div>
       </section>

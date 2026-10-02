@@ -5,7 +5,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'ShipProbe checks',
-  description: 'Security, package and agent-file checks, run on this server with ShipProbe.',
+  description: 'This server runs ShipProbe security, package and agent-file checks.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
